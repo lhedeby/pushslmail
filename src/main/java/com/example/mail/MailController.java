@@ -12,9 +12,15 @@ public class MailController {
     @Autowired
     public JavaMailSender emailSender;
 
+    @Autowired
+    Repository repository;
+
+    @Autowired
+    APIData apiData;
+
     @PostConstruct
     public void CreateThread() {
-        Reminder reminder = new Reminder(emailSender);
+        Reminder reminder = new Reminder(emailSender, repository, apiData);
 
         Thread thread = new Thread(reminder);
         thread.start();
