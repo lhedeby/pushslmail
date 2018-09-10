@@ -1,13 +1,20 @@
 package com.example.mail;
 
+import com.example.mail.objects.DBdata;
 import org.springframework.mail.javamail.JavaMailSender;
+
+import java.sql.SQLException;
 
 public class Reminder implements Runnable {
 
     JavaMailSender javaMailSender;
+    Repository repository;
+    APIData apiData;
 
-    public Reminder(JavaMailSender javaMailSender) {
+    public Reminder(JavaMailSender javaMailSender, Repository repository, APIData apiData) {
         this.javaMailSender = javaMailSender;
+        this.repository = repository;
+        this.apiData = apiData;
     }
 
     public String sendMail(String mail, String origin, String time, String type) {
@@ -15,7 +22,7 @@ public class Reminder implements Runnable {
         MailService emailService = new MailService(javaMailSender);
 
         String to = mail;
-        String subject = "Beräknad ankomsttid är " + time + "till " + origin;
+        String subject = "Beräknad ankomsttid är " + time + " till " + origin;
         String text = "Hej! " + "\n" +
                 "Beräknad ankomsttid för din " + type +
                 "är " + time + "till hållplats " + origin + "." + "\n" + "\n" +
@@ -31,7 +38,19 @@ public class Reminder implements Runnable {
     public void run() {
 
         while (true) {
-            sendMail("asd", "asdfas", "sdf", "jkshdf");
+            try {
+                var dbList = repository.listDBdata();
+                for(DBdata data : dbList) {
+                    System.out.println(data);
+
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+
+//            sendMail("ludwig@hedeby.me", "asdfas", "sdf", "jkshdf");
             try {
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
