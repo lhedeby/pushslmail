@@ -33,21 +33,5 @@ import org.thymeleaf.context.Context;
             emailSender.send(message);
         }
 
-        public void sendTemplateMessage(String to, String subject, String name) {
-            MimeMessagePreparator messagePreparator = mimeMessage -> {
-                MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
-                messageHelper.setTo(to);
-                messageHelper.setSubject(subject);
-                String content = this.build(name);
-                messageHelper.setText(content, true);
-            };
-            emailSender.send(messagePreparator);
-        }
 
-
-        private String build(String name) {
-            Context context = new Context();
-            context.setVariable("name", name);
-            return templateEngine.process("mailtemplate", context);
-        }
     }
