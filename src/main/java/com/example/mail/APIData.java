@@ -1,6 +1,6 @@
 package com.example.mail;
 
-import com.example.mail.objects.RealTimeBusesAndMetros;
+import com.example.mail.objects.RealTime;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -17,7 +17,7 @@ import java.util.Scanner;
 @Component
 public class APIData {
 
-    public List<RealTimeBusesAndMetros> getRealTimeInfo(String siteId, String timewindow) {
+    public List<RealTime> getRealTimeInfo(String siteId, String timewindow) {
         String format = "json";
         String key = System.getenv("RealTimeKey");
 
@@ -29,17 +29,28 @@ public class APIData {
         String result = fetch(urlString);
 
         JsonObject jsonObject = new JsonParser().parse(result).getAsJsonObject();
-        JsonArray metroArray = jsonObject.get("ResponseData").getAsJsonObject().get("Metros").getAsJsonArray();
-        List<RealTimeBusesAndMetros> realTimeList = new ArrayList<>();
-
+        List<RealTime> realTimeList = new ArrayList<>();
         Gson gson = new Gson();
-        for (int i = 0; i < metroArray.size(); i++) {
-            realTimeList.add(gson.fromJson(metroArray.get(i), RealTimeBusesAndMetros.class));
-        }
 
+        JsonArray metroArray = jsonObject.get("ResponseData").getAsJsonObject().get("Metros").getAsJsonArray();
+        for (int i = 0; i < metroArray.size(); i++) {
+            realTimeList.add(gson.fromJson(metroArray.get(i), RealTime.class));
+        }
         JsonArray busArray = jsonObject.get("ResponseData").getAsJsonObject().get("Buses").getAsJsonArray();
         for (int i = 0; i < busArray.size(); i++) {
-            realTimeList.add(gson.fromJson(busArray.get(i), RealTimeBusesAndMetros.class));
+            realTimeList.add(gson.fromJson(busArray.get(i), RealTime.class));
+        }
+        JsonArray trainArray = jsonObject.get("ResponseData").getAsJsonObject().get("Trains").getAsJsonArray();
+        for (int i = 0; i < trainArray.size(); i++) {
+            realTimeList.add(gson.fromJson(trainArray.get(i), RealTime.class));
+        }
+        JsonArray tramsArray = jsonObject.get("ResponseData").getAsJsonObject().get("Trams").getAsJsonArray();
+        for (int i = 0; i < trainArray.size(); i++) {
+            realTimeList.add(gson.fromJson(tramsArray.get(i), RealTime.class));
+        }
+        JsonArray shipsArray = jsonObject.get("ResponseData").getAsJsonObject().get("Ships").getAsJsonArray();
+        for (int i = 0; i < shipsArray.size(); i++) {
+            realTimeList.add(gson.fromJson(shipsArray.get(i), RealTime.class));
         }
         return realTimeList;
     }

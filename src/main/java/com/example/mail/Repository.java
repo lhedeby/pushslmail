@@ -42,42 +42,5 @@ public class Repository {
             statement.executeUpdate();
         }
     }
-
-    public void addData(String email, String journeyNumberRT, String timeBeforeLeaving, String siteId) throws SQLException {
-        try (Connection conn = dataSource.getConnection()) {
-            PreparedStatement checkUsers = conn.prepareStatement("SELECT * FROM Users WHERE UserEmail = ? ");
-            checkUsers.setString(1, email);
-            ResultSet resultset = checkUsers.executeQuery();
-            int id;
-            if (resultset.next()) {
-                id = resultset.getInt("User_ID");
-            } else {
-                PreparedStatement statement1 = conn.prepareStatement("INSERT INTO Users VALUES (?);");
-                statement1.setString(1, email);
-                statement1.executeUpdate();
-
-                PreparedStatement statement2 = conn.prepareStatement(" SELECT * FROM Users WHERE UserEmail = ?");
-                statement2.setString(1, email);
-                ResultSet resultSet = statement2.executeQuery();
-                resultSet.next();
-                id = resultSet.getInt("User_ID");
-            }
-
-            PreparedStatement addTravelStatemnet = conn.prepareStatement("INSERT INTO Travels VALUES (?,?,?,?,?)");
-            addTravelStatemnet.setInt(1, Integer.parseInt(journeyNumberRT));
-            addTravelStatemnet.setString(2, timeBeforeLeaving);
-            addTravelStatemnet.setString(3, "1956-03-11");
-            addTravelStatemnet.setInt(4, id);
-            addTravelStatemnet.setString(5, siteId);
-            System.out.println("number" + journeyNumberRT);
-            System.out.println("timebeforeleaving: " + timeBeforeLeaving);
-            System.out.println("id: " + id);
-            System.out.println("siteID: " + siteId);
-            System.out.println(addTravelStatemnet.toString());
-            addTravelStatemnet.executeUpdate();
-
-            System.out.println("id: " + id);
-        }
-    }
 }
 

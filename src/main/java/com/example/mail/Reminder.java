@@ -1,15 +1,13 @@
 package com.example.mail;
 
 import com.example.mail.objects.DBdata;
-import com.example.mail.objects.RealTimeBusesAndMetros;
+import com.example.mail.objects.RealTime;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import java.sql.SQLException;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 public class Reminder implements Runnable {
 
@@ -54,7 +52,7 @@ public class Reminder implements Runnable {
                 var dbList = repository.listDBdata();
                 for(DBdata data : dbList) {
                     var realTimeList = apiData.getRealTimeInfo(data.siteInfo, "60");
-                    for(RealTimeBusesAndMetros rt : realTimeList) {
+                    for(RealTime rt : realTimeList) {
                         if(rt.JourneyNumber.equals(data.journeynumber)) {
 
                             rt.ExpectedDateTime = rt.ExpectedDateTime.replace("T", " ");
@@ -63,27 +61,18 @@ public class Reminder implements Runnable {
                             LocalDateTime currentTime = LocalDateTime.now();
                             Duration timeLeft = Duration.between(currentTime, realTime);
 
-                            System.out.println("seconds left: " + timeLeft.getSeconds());
-                            System.out.println(Integer.parseInt(data.timebeforeleavning));
                             if(timeLeft.getSeconds() / 60 < Integer.parseInt(data.timebeforeleavning)) {
-
                                 sendMail(data.mail, rt.StopAreaName, (timeLeft.getSeconds() / 60) + "", rt.TransportMode);
-                                System.out.println("send mail...");
                                 repository.deleteData(data.journeynumber);
-                                System.out.println("remove from database");
                             }
-
                         }
                     }
                 }
-
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
-
             try {
-                Thread.sleep(30000);
+                Thread.sleep(15000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
