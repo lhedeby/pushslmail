@@ -21,7 +21,6 @@ public class MailController {
     @PostConstruct
     public void CreateThread() {
         Reminder reminder = new Reminder(emailSender, repository, apiData);
-
         Thread thread = new Thread(reminder);
         thread.start();
     }
