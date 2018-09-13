@@ -62,7 +62,7 @@ public class Reminder implements Runnable {
                             Duration timeLeft = Duration.between(currentTime, realTime);
 
                             if(timeLeft.getSeconds() / 60 < Integer.parseInt(data.timebeforeleavning)) {
-                                sendMail(data.mail, rt.StopAreaName, (timeLeft.getSeconds() / 60) + "", rt.TransportMode);
+                                sendMail(data.mail, rt.StopAreaName, data.timebeforeleavning, rt.TransportMode);
                                 repository.deleteData(data.journeynumber);
                             }
                         }
