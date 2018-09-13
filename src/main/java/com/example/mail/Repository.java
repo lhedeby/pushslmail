@@ -28,7 +28,6 @@ public class Repository {
                         rs.getString("TimeBeforeLeaving"), rs.getString("Date"), rs.getString("SiteInfo"));
                 datalist.add(dbdata);
             }
-
             return datalist;
         } catch (SQLException e) {
             throw new SQLException(e);
@@ -43,4 +42,3 @@ public class Repository {
         }
     }
 }
-
