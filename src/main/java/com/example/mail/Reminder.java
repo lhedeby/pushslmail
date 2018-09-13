@@ -77,7 +77,6 @@ public class Reminder implements Runnable {
                 e.printStackTrace();
             }
         }
-
     }
 }
 
