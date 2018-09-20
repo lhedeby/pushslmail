@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class Reminder implements Runnable {
 
@@ -49,9 +50,9 @@ public class Reminder implements Runnable {
 
         while (true) {
             try {
-                var dbList = repository.listDBdata();
+                List<DBdata> dbList = repository.listDBdata();
                 for(DBdata data : dbList) {
-                    var realTimeList = apiData.getRealTimeInfo(data.siteInfo, "60");
+                    List<RealTime> realTimeList = apiData.getRealTimeInfo(data.siteInfo, "60");
                     for(RealTime rt : realTimeList) {
                         if(rt.JourneyNumber.equals(data.journeynumber)) {
 
