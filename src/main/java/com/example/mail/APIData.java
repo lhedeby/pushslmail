@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -17,12 +18,14 @@ import java.util.Scanner;
 @Component
 public class APIData {
 
+    @Value("${RealTimeKey}")
+    private String RealTimeKey;
+
     public List<RealTime> getRealTimeInfo(String siteId, String timewindow) {
         String format = "json";
-        String key = System.getenv("RealTimeKey");
 
         String urlString = "http://api.sl.se/api2/realtimedeparturesV4." + format
-                + "?key=" + key
+                + "?key=" + RealTimeKey
                 + "&siteid=" + siteId
                 + "&timewindow=" + timewindow;
 
